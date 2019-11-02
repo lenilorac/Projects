@@ -1,0 +1,122 @@
+class Widget {
+  int x, y, width, height; 
+  String label,imageName; 
+  int event;
+  int index = -1;
+  boolean isImage = false, isTouchingImg = false, centerText;
+  color widgetColor, labelColor, strokeColor; 
+  PFont widgetFont;
+  PImage image,unTouchedImg,touchedImg,currentImg;
+  
+  Widget(int x,int y, int width, int height, int event)
+  {
+    this.x=x; this.y=y; this.width=width; this.height=height; this.event=event;
+  }
+  
+  Widget(int x,int y, int width, int height, String label, color widgetColor, color labelColor, PFont widgetFont, int event, boolean centerText)
+  {
+    this.x = x; 
+    this.y = y; 
+    this.width = width; 
+    this.height= height;  
+    this.event = event;
+    this.label = label;
+    this.widgetColor = widgetColor; 
+    this.labelColor = labelColor;
+    this.widgetFont = widgetFont; 
+    labelColor= black;
+    strokeColor = white;
+    this.centerText = centerText;
+  }
+  
+  Widget(int x,int y, int width, int height, String label, color widgetColor, color labelColor, PFont widgetFont, int event, int index)
+  {
+    this.x = x; 
+    this.y = y; 
+    this.width = width; 
+    this.height= height; 
+    this.label = label; 
+    this.event = event; 
+    this.widgetColor = widgetColor;
+    this.labelColor = labelColor;
+    this.widgetFont = widgetFont; 
+    labelColor= black;
+    strokeColor = white;
+    this.index = index;
+  }
+  
+  Widget(int x,int y, int width, int height, PImage image, int event, boolean isImage)
+  {
+    this.x=x; 
+    this.y=y; 
+    this.width = width; 
+    this.height= height;
+    this.event = event;
+    this.isImage = isImage;
+    this.image = image;
+  }
+  
+  Widget(int x,int y,int width, int height, PImage unTouchedImg,PImage touchedImg, String name,int event)
+  {
+    this.x=x;
+    this.y=y;
+    this.width = width;
+    this.height = height;
+    this.unTouchedImg = unTouchedImg;
+    this.touchedImg = touchedImg;
+    this.imageName = name;
+    this.event = event;
+    currentImg = unTouchedImg;
+    isTouchingImg = true;
+  }
+  
+  void draw()
+  {
+    if(isTouchingImg)
+    {
+      image(currentImg,x,y,currentImg.width/3,currentImg.height/3);
+      fill(0);
+      text(imageName,x+5,y+currentImg.height/3+SCREENX/90);
+    }
+    else if(isImage)
+    {
+      image(image, x, y);
+    } else {
+      stroke(strokeColor);
+      fill(widgetColor); 
+      rect(x, y, width, height); 
+      fill(labelColor);
+      textSize(SCREENX/40);
+      if(centerText)
+        text(label, x + (width / 2) - 40, y + (height / 2) + 5);
+      else
+        text(label, x + 10, y + height - 15);
+    }
+  }
+  
+  void touched(int mx,int my)
+  {
+    if(mx >= x && mx <= (currentImg.width / 3 + x) && my >= y && my <= (currentImg.height / 3 + y))
+    {
+      currentImg = touchedImg;
+    }
+    else
+    {
+      currentImg = unTouchedImg;
+    }
+  }
+
+  int getEvent(int mX, int mY)
+  {
+    if(mX > x && mX < x + width && mY > y && mY < y + height)
+    { 
+      return event;
+    }
+    return EVENT_NULL; 
+  }
+  
+  void changeColour(color colour)
+  {
+    widgetColor = colour;
+  }
+}

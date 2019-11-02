@@ -1,0 +1,82 @@
+//Event Constants  -Ruth
+final int TO_SEARCH_EVENT = 1; 
+final int TO_HOME_EVENT = 2; 
+final int TO_ALL_REVIEWS_EVENT = 3;
+final int TO_SINGLE_REVIEW_EVENT = 4;
+final int NEXT_EVENT = 5;
+final int BACK_EVENT = 6;
+final int TO_GRAPHS_EVENT = 7;
+final int TO_SPECIFIC_REVIEWS_EVENT =8;
+final int FUNNY = 9;
+final int COOL = 10;
+final int USEFUL = 11;
+final int TO_ADD_REVIEW_EVENT = 12;
+final int TO_PRE_GRAPH_EVENT=13;
+final int EDITING_EVENT = 14;
+final int SEARCH_EVENT = 20;  //Do we not already have event 1???
+final int EVENT_NULL=0;
+
+//Screen Constants  -Ruth
+final int SEARCH_SCREEN = 1; 
+final int HOMEPAGE = 2; 
+final int ALL_REVIEWS_SCREEN = 3;
+final int SPECIFIC_REVIEWS_SCREEN = 4;
+final int SINGLE_REVIEW_SCREEN = 5;
+final int GRAPH_SCREEN = 6;
+final int ADD_REVIEW_SCREEN = 7;
+final int PRE_GRAPH_SCREEN=8;
+
+//chartType
+final int BAR_CHART=1;
+final int SCATTER_GRAPH=2;
+
+final int SCREENY = 700;
+final int SCREENX = 900;
+final int HALFSCREENY = 350;
+final int HALFSCREENX = 450;
+
+//standardized border sizes so we can just use all constants everywhere -Leo
+final int SMALL_BORDER = 10;
+final int STANDARD_BORDER = 20;
+final int LARGE_BORDER = 100;
+
+final int TEXT_AREA_X = SCREENX / 8;
+final int TEXT_AREA_Y = SCREENY / 12 + 100;
+final int TEXT_AREA_SIZE_X = (SCREENX / 4) * 3;
+final int TEXT_AREA_SIZE_Y = (SCREENY / 4) * 3;
+
+//nav bar dimenions -Leo
+final int NAV_ICON_SIZE = 64;
+final int NAV_BAR_SIZE_Y = 104;
+final int NAV_BAR_SIZE_X = SCREENX;
+
+//searchbar dimensions -Leo
+final int SEARCHBAR_SIZE_X = 400;
+final int SEARCHBAR_SIZE_Y = 60;
+
+//arrow dimensions
+final int ARROW_SIZE = 48;
+
+final int BACK_BOTTON_X = TEXT_AREA_X - STANDARD_BORDER - ARROW_SIZE;
+final int BACK_BOTTON_Y = SCREENY / 2 + 100;
+final int NEXT_BOTTON_X = TEXT_AREA_X + TEXT_AREA_SIZE_X + STANDARD_BORDER;
+final int NEXT_BOTTON_Y = SCREENY / 2 + 100; 
+final int TEXT_SHADE_BOTTOM_Y = (TEXT_AREA_Y+TEXT_AREA_SIZE_Y-SCREENY/20);
+
+//graph constants
+final int WIDTH_OF_BAR = 50;
+
+//useful,cool,funny
+final int UCF_SIZE = 30;
+final int UCF_BOTTON_Y = TEXT_SHADE_BOTTOM_Y + 10;
+final int USEFUL_BOTTON_X = TEXT_AREA_X + 10;
+final int FUNNY_BOTTON_X = TEXT_AREA_X + (LARGE_BORDER / 2) + UCF_SIZE + 20;
+final int COOL_BOTTON_X = TEXT_AREA_X + LARGE_BORDER + (2 * UCF_SIZE) + 30;
+
+//star numbers
+final int ONE_STAR = 1;
+final int TWO_STAR = 2;
+final int THREE_STAR = 3;
+final int FOUR_STAR = 4;
+final int FIVE_STAR = 5;
+final int STAR_SPACING = 22;

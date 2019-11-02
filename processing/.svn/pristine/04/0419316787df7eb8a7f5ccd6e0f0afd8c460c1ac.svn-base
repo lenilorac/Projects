@@ -1,0 +1,39 @@
+//Leo
+class NavBar { 
+  ArrayList widgetListNavBar;
+  PImage homeImage, searchImage, reviewImage;
+  
+  NavBar()
+  {
+    //these widgets are always visible -Leo
+    Widget goHomeWidget, goSearchWidget, goReviewWidget,goPreGraphWidget,goAddReviewWidget;
+    homeImage = loadImage("house.png");
+    searchImage = loadImage("search.png");
+    reviewImage = loadImage("review.png");
+    goHomeWidget = new Widget(STANDARD_BORDER, STANDARD_BORDER, NAV_ICON_SIZE, NAV_ICON_SIZE, homeImage, TO_HOME_EVENT, true);
+    goSearchWidget = new Widget(NAV_ICON_SIZE + (2 * STANDARD_BORDER), STANDARD_BORDER, NAV_ICON_SIZE, NAV_ICON_SIZE, searchImage, TO_SEARCH_EVENT, true);
+    goReviewWidget = new Widget((2 * NAV_ICON_SIZE) + (3 * STANDARD_BORDER), STANDARD_BORDER, NAV_ICON_SIZE, NAV_ICON_SIZE, reviewImage, TO_ALL_REVIEWS_EVENT, true);
+    goPreGraphWidget = new Widget((3 * NAV_ICON_SIZE) + (4 * STANDARD_BORDER), STANDARD_BORDER, NAV_ICON_SIZE, NAV_ICON_SIZE, reviewImage, TO_PRE_GRAPH_EVENT, true);
+    goAddReviewWidget = new Widget((4 * NAV_ICON_SIZE) + (5 * STANDARD_BORDER), STANDARD_BORDER, NAV_ICON_SIZE, NAV_ICON_SIZE, reviewImage, TO_ADD_REVIEW_EVENT, true);
+    widgetListNavBar = new ArrayList();
+    widgetListNavBar.add(goHomeWidget);
+    widgetListNavBar.add(goSearchWidget);
+    widgetListNavBar.add(goReviewWidget);
+    widgetListNavBar.add(goPreGraphWidget);
+    widgetListNavBar.add(goAddReviewWidget);
+  }
+  
+  void draw()
+  {
+    //drawing our consistent navigation bar
+    fill(camogreen);
+    noStroke();
+    rect(0, 0, SCREENX, LARGE_BORDER + 4);
+    //drawing our consistent widgets -Leo
+    for(int i = 0; i < widgetListNavBar.size(); i++)
+    { 
+      Widget aWidget = (Widget) widgetListNavBar.get(i); 
+      aWidget.draw();
+    }
+  }
+} 

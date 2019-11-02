@@ -1,0 +1,66 @@
+class AddReviewScreen extends Screen {
+  Textfield businessNameBox,userNameBox;
+  Textfield writtingBox;
+  
+  
+  AddReviewScreen() {
+    super();
+    setUpThis();
+    
+  }
+  
+    void setUpThis()
+     {
+     widgetList = new ArrayList();
+     businessNameBox = addReviewScreenCP5.addTextfield("Business Box").setPosition(TEXT_AREA_X,TEXT_AREA_Y-STANDARD_BORDER).setSize(TEXT_AREA_SIZE_X/2-2*STANDARD_BORDER,TEXT_AREA_SIZE_Y/6).setColorBackground(green)
+     .setText("Business Name").setFont(stdFont);
+     
+     userNameBox = addReviewScreenCP5.addTextfield("Username Box").setPosition(TEXT_AREA_X+STANDARD_BORDER+TEXT_AREA_SIZE_X/2,TEXT_AREA_Y-STANDARD_BORDER).setSize(TEXT_AREA_SIZE_X/2-2*STANDARD_BORDER,TEXT_AREA_SIZE_Y/6).setColorBackground(green)
+     .setText("User Name").setFont(stdFont);
+     
+     Widget editingWidget = new Widget(TEXT_AREA_X,TEXT_AREA_Y+TEXT_AREA_SIZE_Y/6+STANDARD_BORDER,TEXT_AREA_SIZE_X,TEXT_AREA_SIZE_Y*3/4,EDITING_EVENT);
+    
+     widgetList.add(editingWidget);
+     
+     }
+  
+  void draw() {
+    
+    
+    background(white);
+    
+    addReviewScreenCP5.show();
+    if(businessNameBox.isMousePressed())
+      {businessNameBox.clear();}
+    
+    if(userNameBox.isMousePressed())
+      {userNameBox.clear();}
+    fill(green);
+    rect(TEXT_AREA_X,TEXT_AREA_Y+TEXT_AREA_SIZE_Y/6+STANDARD_BORDER,TEXT_AREA_SIZE_X,TEXT_AREA_SIZE_Y*3/4);
+    fill(white);
+    textSize(20);
+    text(writeReviewText,TEXT_AREA_X,TEXT_AREA_Y+TEXT_AREA_SIZE_Y/6+STANDARD_BORDER,TEXT_AREA_SIZE_X,TEXT_AREA_SIZE_Y*3/4);
+    
+    }
+    
+  
+
+  
+  void hide()
+  {
+    addReviewScreenCP5.hide();
+  }
+  
+  void reset()
+  {
+     businessNameBox.setText("Business Name");
+     userNameBox.setText("User Name");
+     
+  }
+  
+  
+  
+
+  
+  
+}

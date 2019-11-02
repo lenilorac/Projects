@@ -1,0 +1,94 @@
+//Ruth
+class ReviewScreen extends Screen
+{
+  ReviewScreen(ArrayList<Review> reviewList)
+  {
+    super(reviewList); 
+    reviewPage = true;
+    init_widgets();
+  }
+  
+  ReviewScreen(Review aReview)
+  {
+    super(aReview);
+    reviewPage = true;
+    init_aReview_widgets();
+  }
+  
+  void init_widgets()
+  {
+    Widget nextWidget, previousWidget,funnyWidget,usefulWidget,coolWidget;
+    nextWidget = new Widget(NEXT_BOTTON_X, NEXT_BOTTON_Y, ARROW_SIZE, ARROW_SIZE, nextImage, NEXT_EVENT, true);
+    previousWidget = new Widget(BACK_BOTTON_X, BACK_BOTTON_Y, ARROW_SIZE, ARROW_SIZE, previousImage, BACK_EVENT, true);
+    funnyWidget = new Widget(UCF_BOTTON_X,FUNNY_BOTTON_Y,funny.width/3,funny.height/3,funny,funny1,"funny",FUNNY);
+    usefulWidget = new Widget(UCF_BOTTON_X,USEFUL_BOTTON_Y,useful.width/3,useful.height/3,useful,useful1,"useful",USEFUL);
+    coolWidget = new Widget(UCF_BOTTON_X,COOL_BOTTON_Y,cool.width/3,cool.height/3,cool,cool1,"cool",COOL);
+    widgetList = new ArrayList();
+    widgetList.add(nextWidget); 
+    widgetList.add(previousWidget);
+    widgetList.add(funnyWidget);
+    widgetList.add(usefulWidget);
+    widgetList.add(coolWidget);   
+  }
+  
+  void init_aReview_widgets()
+  {
+     Widget funnyWidget,usefulWidget,coolWidget;
+    funnyWidget = new Widget(UCF_BOTTON_X,FUNNY_BOTTON_Y,funny.width/3,funny.height/3,funny,funny1,"funny",FUNNY);
+    usefulWidget = new Widget(UCF_BOTTON_X,USEFUL_BOTTON_Y,useful.width/3,useful.height/3,useful,useful1,"useful",USEFUL);
+    coolWidget = new Widget(UCF_BOTTON_X,COOL_BOTTON_Y,cool.width/3,cool.height/3,cool,cool1,"cool",COOL);
+    widgetList = new ArrayList();
+    widgetList.add(funnyWidget);
+    widgetList.add(usefulWidget);
+    widgetList.add(coolWidget);
+  }
+ 
+   // He 
+  void draw()
+  {
+    background(white);
+    if (widgetList!=null)
+    {
+      for(int i=0; i < widgetList.size(); i++)
+      { 
+        Widget aWidget = (Widget) widgetList.get(i); 
+        aWidget.draw();
+      }
+    }
+    noStroke();
+    //the original rectangle
+    fill(green);
+    rect(TEXT_AREA_X, TEXT_AREA_Y, TEXT_AREA_SIZE_X, TEXT_AREA_SIZE_Y);
+    //the review text itself
+    fill(white);
+    textSize(SCREENX / 50);
+    text(reviewList.get(count).text, TEXT_AREA_X + 5, TEXT_AREA_Y + SCREENY / 15 + textMove + 2, TEXT_AREA_SIZE_X - 25, TEXT_AREA_SIZE_Y + SCREENY * 3);
+    //the bars at the top and bottom of the rectangle
+    fill(camogreen);
+    rect(TEXT_AREA_X, TEXT_AREA_Y, TEXT_AREA_SIZE_X, LARGE_BORDER / 2);
+    rect(TEXT_AREA_X, TEXT_SHADE_BOTTOM_Y, TEXT_AREA_SIZE_X, LARGE_BORDER / 2);
+    //the text at the top and bottom of the rectangle
+    fill(white);
+    textSize(SCREENX / 70);
+    text(reviewList.get(count).userName+" wrote this review for -"+reviewList.get(count).businessName+"- at "+reviewList.get(count).date+" and gave "+reviewList.get(count).stars+" stars.",
+      TEXT_AREA_X + 5, TEXT_AREA_Y + 10, TEXT_AREA_SIZE_X - 5, TEXT_AREA_SIZE_Y - 5);
+    text(reviewList.get(count).useful+" people think this review is useful, "+reviewList.get(count).funny+" people think this review is funny, and "+reviewList.get(count).cool+" people think this review is cool ",
+      TEXT_AREA_X + 5, TEXT_AREA_Y + TEXT_AREA_SIZE_Y - SCREENY / 20 + STANDARD_BORDER / 2, TEXT_AREA_SIZE_X - 5, TEXT_AREA_SIZE_Y - 5);
+    //the scrollbar
+    stroke(bluegreen);
+    rect(TEXT_AREA_X + TEXT_AREA_SIZE_X - 20, TEXT_AREA_Y + SCREENY / 15 + 1 - textMove / 5, 19, scrollBarLength); //scrollBar
+    drawStars();
+  }
+  
+  void drawStars()
+  {
+    float stars=0;
+    Query starQuary = new Query();
+    starQuary.bName = reviewList.get(count).businessName;
+    stars = starQuary.averageStars();
+    for(int i=0;i<stars;i++)
+    {
+      image(star,TEXT_AREA_X+TEXT_AREA_SIZE_X-i*STAR_SPACING,NAV_BAR_SIZE_Y,TEXT_AREA_Y-NAV_BAR_SIZE_Y,TEXT_AREA_Y-NAV_BAR_SIZE_Y);
+    }
+  } 
+} 

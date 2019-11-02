@@ -1,0 +1,47 @@
+//Ruth
+class Review {
+  String userId;
+  String userName;
+  String businessID; 
+  String businessName;
+  int stars; 
+  LocalDate date; 
+  String text; 
+  int useful; 
+  int funny; 
+  int cool;
+  int textLength,emptyLine=0;
+  char[] textToChar;
+  boolean usefulAdded=false;
+  boolean funnyAdded=false;
+  boolean coolAdded=false;
+  Review (String userId, String userName, String businessID, String businessName, int stars, LocalDate date, String text, int useful, int funny, int cool)
+  {
+    this.userId = userId;
+    this.userName = userName;
+    this.businessID = businessID;
+    this.businessName = businessName;
+    this.stars = stars;
+    this.date = date;
+    this.text = text;
+    this.useful = useful;
+    this.funny = funny;
+    this.cool = cool;
+  }
+   
+  void getLength()
+  {
+    textToChar = text.toCharArray();
+     
+    for(int i=170;i<textToChar.length;i++)
+    {
+      if(textToChar[i]=='\n')
+      {
+        emptyLine++;
+      }
+    }
+     
+    int emptyLength = emptyLine * 82;
+    textLength = text.length() + emptyLength;
+  }   
+}

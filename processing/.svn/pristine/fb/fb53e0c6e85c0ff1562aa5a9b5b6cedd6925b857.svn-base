@@ -1,0 +1,94 @@
+//Leo
+class SearchScreen extends Screen
+{
+  ArrayList<Review> results;
+  boolean searched = false, resultPage = false;;
+  int offset;
+  color searchColour = green;
+  Textfield businessBox, reviewerBox, dateBox;
+  
+  SearchScreen ()
+  {
+    super(); 
+    reviewPage = false;
+    setupSearch();
+  }
+  
+  void setupSearch()
+  {
+    widgetList = new ArrayList<Widget>(0);
+    //scary controlp5 test shit -Leo
+    businessBox = searchScreenCP5.addTextfield("Business Search")
+    .setPosition(STANDARD_BORDER, NAV_BAR_SIZE_Y + LARGE_BORDER).setSize(SEARCHBAR_SIZE_X, SEARCHBAR_SIZE_Y)
+    .setColorBackground(green).setCaptionLabel("Business Search").setText("eg. Randy's Flowers").setColorCaptionLabel(bluegreen).setFont(stdFont);
+    reviewerBox = searchScreenCP5.addTextfield("Reviewer Search")
+    .setPosition(STANDARD_BORDER, NAV_BAR_SIZE_Y + (2 * LARGE_BORDER) + (2 * STANDARD_BORDER)).setSize(SEARCHBAR_SIZE_X, SEARCHBAR_SIZE_Y)
+    .setColorBackground(green).setCaptionLabel("Reviewer Search").setText("eg. Susanne Waters").setColorCaptionLabel(bluegreen).setFont(stdFont);
+    dateBox = searchScreenCP5.addTextfield("Date Search")
+    .setPosition(STANDARD_BORDER, NAV_BAR_SIZE_Y + (3 * LARGE_BORDER) + (4 * STANDARD_BORDER)).setSize(SEARCHBAR_SIZE_X, SEARCHBAR_SIZE_Y)
+    .setColorBackground(green).setCaptionLabel("Date Search").setText("eg. dd/mm/yyyy").setColorCaptionLabel(bluegreen).setFont(stdFont);
+    Widget search = new Widget(STANDARD_BORDER, SCREENY - (4 * STANDARD_BORDER), SEARCHBAR_SIZE_X, SEARCHBAR_SIZE_Y, "Search", searchColour, white, stdFont, SEARCH_EVENT, true);
+    widgetList.add(search);
+    //widget result cards
+  }
+  
+  void draw()
+  {
+    background(white);
+    fill(green);
+    noStroke();
+    rect(HALFSCREENX, NAV_BAR_SIZE_Y + LARGE_BORDER, HALFSCREENX - STANDARD_BORDER, SCREENY - NAV_BAR_SIZE_Y - LARGE_BORDER - STANDARD_BORDER);
+    fill(camogreen);
+    rect(HALFSCREENX, NAV_BAR_SIZE_Y + LARGE_BORDER, HALFSCREENX - STANDARD_BORDER, SEARCHBAR_SIZE_Y);
+    fill(white);
+    textSize(32);
+    text("Results:", HALFSCREENX + (HALFSCREENX - STANDARD_BORDER) / 2.9, NAV_BAR_SIZE_Y + LARGE_BORDER + SEARCHBAR_SIZE_Y - (2 * SMALL_BORDER));
+    searchScreenCP5.show();
+    fill(white);
+    rect(HALFSCREENX, NAV_BAR_SIZE_Y, HALFSCREENX - STANDARD_BORDER, LARGE_BORDER);
+    rect(HALFSCREENX, SCREENY - STANDARD_BORDER, HALFSCREENX - STANDARD_BORDER, LARGE_BORDER);
+    if(businessBox.isMousePressed())
+      businessBox.clear();
+    if(reviewerBox.isMousePressed())
+      reviewerBox.clear();
+    if(dateBox.isMousePressed())
+      dateBox.clear();
+    widgetList.get(0).draw();
+  }
+  
+  void hide()
+  {
+    searchScreenCP5.hide();
+  }
+  
+  void search()
+  {
+    println("bang");
+    String businessName = searchScreenCP5.get(Textfield.class,"Business Search").getText();
+    String reviewerName = searchScreenCP5.get(Textfield.class,"Reviewer Search").getText();
+    String date = searchScreenCP5.get(Textfield.class,"Date Search").getText();
+    Query currentQuery = new Query(businessName, reviewerName, date);
+    results = currentQuery.search();
+    searched = true;
+    if(results.size() != 0)
+    {
+      createSpecificReviewsSceen(results);
+    }
+  }
+  
+  void mouseOverSearch(float mx, float my)
+  {
+    if(mx >= STANDARD_BORDER && mx <= STANDARD_BORDER + SEARCHBAR_SIZE_X && my >= SCREENY - (4 * STANDARD_BORDER) && my <= SCREENY - (4 * STANDARD_BORDER) + SEARCHBAR_SIZE_Y)
+      searchColour = color(bluegreen);
+    else
+      searchColour = color(green);
+    widgetList.get(0).changeColour(searchColour);
+  }
+  
+  void resetBoxes()
+  {
+    businessBox.setText("eg. Randy's Flowers");
+    reviewerBox.setText("eg. Susanne Waters");
+    dateBox.setText("eg. dd/mm/yyyy");
+  }
+} 

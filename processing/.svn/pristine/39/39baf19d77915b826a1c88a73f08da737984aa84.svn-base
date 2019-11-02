@@ -1,0 +1,72 @@
+//Ruth
+class Graph extends Screen
+{
+  String title;
+  int type;
+  
+  
+   Graph(ArrayList<Float> chartList, String[] labels, String title, int type)
+   {
+    super();
+    this.type=type;
+    this.title=title;
+    
+    float[] floatArray = new float[chartList.size()];
+    int i = 0;
+    for (Float f : chartList) 
+      floatArray[i++] = (f != null ? f : Float.NaN);
+    
+    textSize(12);
+    barChart.setData(floatArray);
+    barChart.setBarLabels(labels);
+    barChart.setBarColour(green);
+    barChart.setBarGap(25);
+    barChart.setValueFormat("##");
+    barChart.setMaxValue(550);
+    barChart.showValueAxis(true); 
+    barChart.showCategoryAxis(true); 
+   }
+   
+    Graph(ArrayList<Float> chartList, float[] xData, String title, int type)
+    {
+      super();
+      this.type=type;
+      this.title=title;
+      
+      float[] floatArray = new float[chartList.size()];
+      int i = 0;
+      for (Float f : chartList) 
+        floatArray[i++] = (f != null ? f : Float.NaN);
+      
+      textSize(12);
+      lineChart.setData(xData,floatArray);
+      lineChart.showXAxis(true); 
+      lineChart.showYAxis(true); 
+      lineChart.setMinY(0);
+      
+      lineChart.setYFormat("###");  
+      lineChart.setXFormat("0000"); 
+      
+      lineChart.setPointColour(bluegreen);
+      lineChart.setPointSize(5);
+      lineChart.setLineWidth(2);
+     }
+  
+  void draw()
+  {
+    background(255);
+    if (type==BAR_CHART) {
+      barChart.draw(50,150,SCREENX-100,SCREENY-200);
+      fill(120);
+      textSize(22);
+      text(title,100,200);
+    } else if (type==SCATTER_GRAPH) {
+      textSize(9);
+      lineChart.draw(50,150,SCREENX-100,SCREENY-200);
+      fill(120);
+      textSize(20);
+      text(title,100,200);
+    }
+    
+  }
+}

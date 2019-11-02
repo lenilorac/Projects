@@ -1,0 +1,305 @@
+import controlP5.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.gicentre.utils.stat.*;
+
+ArrayList<Review> allReviewsList;
+ArrayList<Review> specificReviewList;
+Table table;
+
+BarChart barChart;
+int count=0;
+int theSingleReviewIndex, reviewIndex;
+PFont stdFont;
+color red;
+color black;
+color white;
+color squareColor;
+color greenish;
+color green;
+color blue;
+color camogreen;
+color darkgreen;
+color bluegreen;
+PImage nextImage;
+PImage previousImage;
+PImage funny, funny1, useful, useful1, cool, cool1, star;
+
+ControlP5 searchScreenCP5,addReviewScreenCP5;
+DateTimeFormatter formatter;
+
+Screen currentScreen;
+SearchScreen searchScreen;
+ReviewScreen allReviewsScreen;
+ReviewScreen specificReviewsScreen;
+ReviewScreen singleReviewScreen;
+HomePage homepage;
+NavBar navigation;
+Graph graphScreen;
+AddReviewScreen addReviewScreen;
+Query query;
+PreGraphScreen preGraphScreen;
+XYChart lineChart;
+
+int screenNumber = 2;
+
+float textMove=-1;
+float scrollBarLength;
+int ONE_TEXT_AREA_LENGTH;
+String writeReviewText="Please write here.";
+boolean editing;
+
+void settings ()
+{
+  size(SCREENX, SCREENY);
+}
+
+void setup()
+{
+  //define colours -Leo
+  black = color(0);
+  white = (#FFFFFF);
+  red = color(255, 0, 0);
+  green = color(#00a86b);
+  blue = color(#5E3EFC);
+  greenish = color(#29ab87);
+  camogreen = color(#2e8b57);
+  darkgreen = color(#2c6654);
+  bluegreen = color(#01656f);
+  squareColor = color(100, 100, 100);
+  
+  //graph setup
+  barChart = new BarChart(this);
+  lineChart = new XYChart(this);
+  
+  //define font
+  stdFont = createFont("ArialNova-128.vlw", 32);
+  textFont(stdFont); 
+  
+  //define images
+  nextImage = loadImage("next.png");
+  previousImage = loadImage("previous.png");
+  funny = loadImage("funny.png");
+  funny1 = loadImage("funny1.png");
+  useful = loadImage("useful.png");
+  useful1 = loadImage("useful1.png");
+  cool = loadImage("cool.png");
+  cool1 = loadImage("cool1.png");
+  star = loadImage("star.png");
+
+  searchScreenCP5  = new ControlP5(this);
+  addReviewScreenCP5 = new ControlP5(this);
+
+  //define boundaries for review screen text
+  int screenSizeX = SCREENX;
+  if (screenSizeX >= 1440)
+    ONE_TEXT_AREA_LENGTH = TEXT_AREA_SIZE_X * SCREENX / 1026 - (SCREENX - 1440) * 3;
+  else
+    ONE_TEXT_AREA_LENGTH = TEXT_AREA_SIZE_X * SCREENX / 1026 - (SCREENX - 1440) * 9 / 10;
+
+  //loading of review data -He //Recent dates and date formatting - Ruth
+  allReviewsList = new ArrayList<Review>();
+  ArrayList<Integer> recentReviews = new ArrayList <Integer>(5);
+  table = loadTable("reviews.csv", "header");
+  for (int i=0; i < table.getRowCount(); i++)
+  {
+    TableRow row = table.getRow(i);
+    LocalDate reviewDate = dateFormatter(row.getString("date"));
+    Review review = new Review(row.getString("user_id"), row.getString("user_name"), row.getString("business_id"), row.getString("business_name"), row.getInt("stars"), 
+      reviewDate, row.getString("text"), row.getInt("useful"), row.getInt("funny"), row.getInt("cool"));
+    review.getLength();
+    allReviewsList.add(review);
+    updateRecentReviews(reviewDate, i, recentReviews);
+  }
+  if (allReviewsList.get(0).textLength-ONE_TEXT_AREA_LENGTH>0)
+    scrollBarLength = TEXT_SHADE_BOTTOM_Y - (TEXT_AREA_Y+SCREENY / 15) - (allReviewsList.get(0).textLength - ONE_TEXT_AREA_LENGTH) / 5;
+  else
+    scrollBarLength = TEXT_SHADE_BOTTOM_Y - (TEXT_AREA_Y+SCREENY / 15); 
+
+  //initalising screens
+  screenNumber = HOMEPAGE;
+  navigation = new NavBar();
+  allReviewsScreen = new ReviewScreen(allReviewsList);
+  homepage = new HomePage(recentReviews);
+  searchScreen = new SearchScreen();
+  query = new Query();
+  addReviewScreen = new AddReviewScreen();
+  preGraphScreen = new PreGraphScreen();
+  currentScreen = homepage;
+
+}
+
+
+//Ruth & Leo
+void draw()
+{
+  if (screenNumber == SEARCH_SCREEN)
+  {
+    searchScreen.draw();
+  } else {
+    searchScreen.hide();
+    searchScreen.resetBoxes();
+  }
+  if (screenNumber == ADD_REVIEW_SCREEN) {
+    addReviewScreen.draw();
+  } else {
+    addReviewScreen.hide();
+    addReviewScreen.reset();
+  }
+  switch(screenNumber)
+  {
+    case HOMEPAGE:
+      homepage.draw();
+      break;
+    case ALL_REVIEWS_SCREEN:
+      allReviewsScreen.draw();
+      break;
+    case SINGLE_REVIEW_SCREEN:
+      singleReviewScreen.draw();
+      break;
+    case SPECIFIC_REVIEWS_SCREEN:
+      specificReviewsScreen.draw();
+      break;
+    case GRAPH_SCREEN:
+      graphScreen.draw();
+      break;
+    case ADD_REVIEW_SCREEN:
+      addReviewScreen.draw();
+       break;
+    case  PRE_GRAPH_SCREEN:
+      preGraphScreen.draw();
+      break;
+  }
+  navigation.draw();
+}
+
+//Ruth & Leo & He
+void mousePressed()
+{
+  currentScreen.checkWidgetEvents();
+  currentScreen.checkNavBar();
+  
+  if (currentScreen.reviewPage==true)
+    currentScreen.checkScrollBar();
+
+  switch(screenNumber)
+  {
+    case HOMEPAGE:
+      currentScreen=homepage;
+      break;
+    case SEARCH_SCREEN:
+      currentScreen = searchScreen;
+      break;
+    case ALL_REVIEWS_SCREEN:
+      currentScreen = allReviewsScreen;
+      break;
+    case SINGLE_REVIEW_SCREEN:
+      currentScreen = singleReviewScreen;
+      break;
+    case SPECIFIC_REVIEWS_SCREEN:
+      currentScreen = specificReviewsScreen;
+      break;
+    case GRAPH_SCREEN:
+     currentScreen = graphScreen;
+     break;
+    case ADD_REVIEW_SCREEN:
+     currentScreen = addReviewScreen;;
+     break;
+    case PRE_GRAPH_SCREEN:
+      currentScreen=preGraphScreen;
+      break;
+  }
+}
+
+void mouseWheel(MouseEvent event) // move text
+{
+  if (currentScreen.reviewPage)
+  {
+    if (currentScreen.reviewList.get(currentScreen.count).textLength>ONE_TEXT_AREA_LENGTH)
+    {
+      if (textMove<0)
+      {
+        if (textMove>-(TEXT_AREA_SIZE_Y*(currentScreen.reviewList.get(currentScreen.count).textLength-ONE_TEXT_AREA_LENGTH)/ONE_TEXT_AREA_LENGTH))
+          textMove += -event.getCount()*25;  
+        else
+          textMove=-(TEXT_AREA_SIZE_Y*(currentScreen.reviewList.get(currentScreen.count).textLength-ONE_TEXT_AREA_LENGTH)/ONE_TEXT_AREA_LENGTH)+1;
+      } else
+        textMove=-1;
+    }
+  }
+}
+
+void mouseDragged() // move scroll bar 
+{
+  if ((TEXT_AREA_Y+SCREENY/15+1-textMove/5>=TEXT_AREA_Y+SCREENY/15)) {
+    if (TEXT_AREA_Y+SCREENY/15+1-textMove/5+scrollBarLength<=TEXT_SHADE_BOTTOM_Y) {
+
+      if (mouseX>=TEXT_AREA_X+TEXT_AREA_SIZE_X-20&&mouseX<=TEXT_AREA_X+TEXT_AREA_SIZE_X-1&&mouseY>=TEXT_AREA_Y+SCREENY/15+1-textMove/5&&mouseY<=TEXT_AREA_Y+SCREENY/15+1-textMove/5+scrollBarLength) {
+        textMove+=5*(pmouseY-mouseY);
+      }
+    } else 
+    textMove+=1;
+  } else 
+  textMove+=-1;
+}
+
+LocalDate dateFormatter (String date) {
+  formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+  LocalDate enteredDate = null;
+  enteredDate = LocalDate.parse(date, formatter);
+  return enteredDate;
+}
+
+void updateRecentReviews (LocalDate newDate, int indexOfReviewList, ArrayList<Integer> recentReviews)
+{
+  if (recentReviews.size()==0)
+  {
+    recentReviews.add(indexOfReviewList);
+  }else
+  {
+    boolean set=false;
+    for (int j=0; j<recentReviews.size()&&!set; j++)
+    {
+      if (newDate.isAfter(allReviewsList.get(recentReviews.get(j)).date))
+      {
+        recentReviews.add(j, indexOfReviewList);
+        set=true;
+        if (recentReviews.size()>5)
+          recentReviews.remove(5);
+      }
+    }
+  }
+}
+void keyPressed()
+  {
+    if(screenNumber==ADD_REVIEW_SCREEN&&editing==true)
+    {
+      if(key=='\b'&&writeReviewText.length()>=1)
+      {
+        writeReviewText = writeReviewText.substring(0,writeReviewText.length()-1);
+      }
+      else
+      writeReviewText+=key;
+    }
+  }
+
+
+void mouseMoved()
+{
+  if(screenNumber == SEARCH_SCREEN)
+  {
+    searchScreen.mouseOverSearch(mouseX, mouseY);
+  }
+}
+
+void createSpecificReviewsSceen(ArrayList<Review> reviews)
+{
+  screenNumber = SPECIFIC_REVIEWS_SCREEN;
+  specificReviewsScreen = new ReviewScreen(reviews);
+}
+
+void toSingleReviewPage(Widget aWidget) 
+{
+  Review aReview = allReviewsList.get(aWidget.index);
+  singleReviewScreen = new ReviewScreen(aReview);
+}

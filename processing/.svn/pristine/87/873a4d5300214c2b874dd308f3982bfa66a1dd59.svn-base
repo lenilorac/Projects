@@ -1,0 +1,37 @@
+//Ruth
+class HomePage extends Screen
+{
+    ArrayList<Integer> recentReviews;
+    
+    HomePage(ArrayList<Integer> recentReviews)
+    {
+      super();
+      reviewPage = false;
+      this.recentReviews = recentReviews;
+      widgetList = new ArrayList<Widget>();
+      init_widgets();
+    }
+
+    
+   void init_widgets()
+   {
+      Widget widgetRecentReviews0, widgetRecentReviews1, widgetRecentReviews2, widgetRecentReviews3, widgetRecentReviews4;
+      widgetRecentReviews0 = new Widget(100, 200, SCREENX - 200, 50, "A review by " + allReviewsList.get(recentReviews.get(0)).userName + " about " + allReviewsList.get(recentReviews.get(0)).businessName, green, white, stdFont, TO_SINGLE_REVIEW_EVENT,recentReviews.get(0));
+      widgetRecentReviews1 = new Widget(100, 250, SCREENX - 200, 50, "A review by " + allReviewsList.get(recentReviews.get(1)).userName + " about " + allReviewsList.get(recentReviews.get(1)).businessName, green, white, stdFont, TO_SINGLE_REVIEW_EVENT,recentReviews.get(1));
+      widgetRecentReviews2 = new Widget(100, 300, SCREENX - 200, 50, "A review by " + allReviewsList.get(recentReviews.get(2)).userName + " about " + allReviewsList.get(recentReviews.get(2)).businessName, green, white, stdFont, TO_SINGLE_REVIEW_EVENT,recentReviews.get(2));
+      widgetRecentReviews3 = new Widget(100, 350, SCREENX - 200, 50, "A review by " + allReviewsList.get(recentReviews.get(3)).userName + " about " + allReviewsList.get(recentReviews.get(3)).businessName, green, white, stdFont, TO_SINGLE_REVIEW_EVENT,recentReviews.get(3));
+      widgetRecentReviews4= new Widget(100, 400, SCREENX - 200, 50, "A review by " + allReviewsList.get(recentReviews.get(4)).userName + " about " + allReviewsList.get(recentReviews.get(4)).businessName, green, white, stdFont, TO_SINGLE_REVIEW_EVENT,recentReviews.get(4));
+      widgetList.add(widgetRecentReviews0); widgetList.add(widgetRecentReviews1); widgetList.add(widgetRecentReviews2); widgetList.add(widgetRecentReviews3); widgetList.add(widgetRecentReviews4);  
+    } 
+    
+    void draw()
+    {
+      background(white);
+      for(int i=0; i < widgetList.size(); i++)
+      {
+        Widget aWidget = (Widget) widgetList.get(i); 
+        aWidget.draw();
+      }
+    }
+    
+}

@@ -1,0 +1,154 @@
+//Ruth
+class Screen {
+  ArrayList<Widget> widgetList;
+  ArrayList<Review> reviewList;
+  int count=0;
+  boolean reviewPage=false;
+  
+   Screen(ArrayList<Review> reviewList)
+   {
+     this.reviewList = reviewList;
+   }
+   
+   Screen(Review aReview)
+   {
+     reviewList = new ArrayList<Review>();
+     reviewList.add(aReview);
+   }
+   
+   Screen() {
+     
+   }
+   
+   void checkScrollBar ()
+   {
+     if(TEXT_AREA_SIZE_Y*(reviewList.get(count).textLength-ONE_TEXT_AREA_LENGTH)/ONE_TEXT_AREA_LENGTH>0)
+       scrollBarLength = TEXT_SHADE_BOTTOM_Y-(TEXT_AREA_Y+SCREENY/15)-(TEXT_AREA_SIZE_Y*(reviewList.get(count).textLength-ONE_TEXT_AREA_LENGTH)/ONE_TEXT_AREA_LENGTH)/5;
+     else
+       scrollBarLength = TEXT_SHADE_BOTTOM_Y-(TEXT_AREA_Y+SCREENY/15);
+  }
+  
+  void checkWidgetEvents() {
+    int event;
+    if (currentScreen.widgetList != null)
+    {
+      for (int i = 0; i < currentScreen.widgetList.size(); i++)
+      { 
+        Widget aWidget = (Widget) currentScreen.widgetList.get(i);
+        event = aWidget.getEvent(mouseX, mouseY); 
+        switch(event)
+        {
+          case NEXT_EVENT:
+            if (currentScreen.count<currentScreen.reviewList.size()) {
+              currentScreen.count++;
+              textMove = -1;
+            }
+            break;
+          case BACK_EVENT:
+            if (currentScreen.count >= 1) {
+              currentScreen.count--;
+              textMove = -1;
+            }
+            break;
+          case TO_ALL_REVIEWS_EVENT:  
+            screenNumber=ALL_REVIEWS_SCREEN;
+            break;
+          case TO_SINGLE_REVIEW_EVENT:
+            screenNumber=SINGLE_REVIEW_SCREEN;
+            toSingleReviewPage(aWidget);
+            theSingleReviewIndex = aWidget.index;
+            break;
+          case FUNNY:
+              if (allReviewsList.get(reviewIndex).funnyAdded==false) {
+                allReviewsList.get(reviewIndex).funny++;
+                allReviewsList.get(reviewIndex).funnyAdded=true;
+              } else {
+                allReviewsList.get(reviewIndex).funny--;
+                allReviewsList.get(reviewIndex).funnyAdded=false;
+              }
+            break;
+          case USEFUL:
+            if (allReviewsList.get(reviewIndex).usefulAdded==false) {
+              allReviewsList.get(reviewIndex).useful++;
+              allReviewsList.get(reviewIndex).usefulAdded=true;
+            } else {
+              allReviewsList.get(reviewIndex).useful--;
+              allReviewsList.get(reviewIndex).usefulAdded=false;
+            }
+            break;
+          case COOL:
+            if (allReviewsList.get(reviewIndex).coolAdded==false) {
+              allReviewsList.get(reviewIndex).cool++;
+              allReviewsList.get(reviewIndex).coolAdded=true;
+            } else {
+              allReviewsList.get(reviewIndex).cool--;
+              allReviewsList.get(reviewIndex).coolAdded=false;
+            }
+            break;
+          case TO_SPECIFIC_REVIEWS_EVENT:
+            screenNumber = SPECIFIC_REVIEWS_SCREEN;
+            break;
+          case TO_GRAPHS_EVENT:
+            screenNumber=GRAPH_SCREEN;
+            setGraph(aWidget.label);
+            break;
+          case SEARCH_EVENT:
+            searchScreen.search();
+            break;
+          case TO_ADD_REVIEW_EVENT:
+             screenNumber=ADD_REVIEW_SCREEN;
+             break;
+          case TO_PRE_GRAPH_EVENT:
+              screenNumber=PRE_GRAPH_SCREEN;
+              break;
+        }
+      }
+      if (screenNumber==ALL_REVIEWS_SCREEN)
+       reviewIndex = currentScreen.count;
+      else
+       reviewIndex = theSingleReviewIndex;
+    }
+  }
+  
+  void setGraph(String graphName) {
+    if (graphName.equals("Stars")) {
+      graphScreen = new Graph(query.countStars(), new String[] {"One Star", "Two Stars","Three Stars","Four Stars","Five Stars"},graphName,BAR_CHART);
+    } else if (graphName.equals("Location")) {
+      //graphScreen = new Graph(query.continents, new String[] {"Africa", "Antarctica", "Asia", "Australia/Oceania", "Europe", "North America","South America"},graphName);
+    } else if (graphName.equals("Reviews Over Time")) {
+      graphScreen = new Graph(query.reviewsOverTime(), new float[] {2007.0,2008.0,2009.0,2010.0,2011.0,2012.0,2013.0,2014.0,2015.0,2016.0,2017.0,2018.0},graphName,SCATTER_GRAPH);
+    }
+  }
+  
+  void checkNavBar() {
+    int event;
+    for (int i = 0; i<navigation.widgetListNavBar.size(); i++)
+    { 
+      Widget aWidget = (Widget) navigation.widgetListNavBar.get(i);
+      event = aWidget.getEvent(mouseX, mouseY);
+      println(event);
+      switch(event)
+      {
+        case TO_HOME_EVENT:
+          screenNumber = HOMEPAGE;
+          break;
+        case TO_SEARCH_EVENT:
+          screenNumber = SEARCH_SCREEN;
+          break;
+        case TO_ALL_REVIEWS_EVENT:  
+          screenNumber=ALL_REVIEWS_SCREEN;
+          break;
+        //needs icon
+        case TO_PRE_GRAPH_EVENT:
+          screenNumber=PRE_GRAPH_SCREEN;
+          break;
+        //needs icon
+        case TO_ADD_REVIEW_EVENT:
+          screenNumber=ADD_REVIEW_SCREEN;
+          println(screenNumber);
+          break;
+      }
+    }
+    
+  }
+}

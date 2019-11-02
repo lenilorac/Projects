@@ -1,0 +1,226 @@
+class Query
+{
+  ArrayList<Review> reviews;
+  String bName, rName, date;
+  LocalDate realDate;
+  boolean validBusiness = false, validName = false, validDate = false;
+  //Leo
+  Query(String bName, String rName, String date)
+  {
+    this.bName = bName;
+    this.rName = rName;
+    this.date = date;
+  }
+  Query(String bName, String rName, LocalDate date)
+  {
+    this.bName = bName;
+    this.rName = rName;
+    this.realDate = date;
+  }
+  Query()
+  {
+    
+  }
+  //method for finding average star rating of a business
+  float averageStars()
+  {
+    float reviewCount = 0, starCount = 0;
+    for (int i = 0; i < allReviewsList.size(); i++)
+    {
+      if(allReviewsList.get(i).businessName.equals(bName))
+      {
+        int stars = allReviewsList.get(i).stars;
+        starCount += stars;
+        reviewCount++;
+      }
+    }
+    starCount /= reviewCount;
+    starCount = Math.round(starCount);
+    return starCount;
+  }
+  //Leo
+  //method for counting overall stars
+  ArrayList<Float> countStars() {
+    float oneStar=0, twoStar=0, threeStar=0, fourStar=0, fiveStar=0;
+    ArrayList<Float> starsList = new ArrayList<Float>();
+    for (int i = 0; i < allReviewsList.size(); i++) {
+      int stars = allReviewsList.get(i).stars;
+      switch(stars) {
+        case(ONE_STAR):
+          oneStar++;
+        break;
+        case(TWO_STAR):
+          twoStar++;
+        break;
+        case(THREE_STAR):
+          threeStar++;
+        break;
+        case(FOUR_STAR):
+          fourStar++;
+        break;
+        case(FIVE_STAR):
+          fiveStar++;
+        break;
+      }
+    } 
+    starsList.add(oneStar); starsList.add(twoStar); starsList.add(threeStar); starsList.add(fourStar); starsList.add(fiveStar);
+    return starsList;
+  }
+  //Ruth
+  //method to find reviews over time
+  ArrayList<Float> reviewsOverTime() {
+    float seven=0, eight=0, nine=0, ten=0, eleven=0, tweleve=0, thirteen=0, fourteen=0, fifteen=0, sixteen=0, seventeen=0, eighteen=0;
+    ArrayList<Float> yearList = new ArrayList<Float>();
+    for (int i = 0; i < allReviewsList.size(); i++) {
+      int year = allReviewsList.get(i).date.getYear();
+      switch(year) {
+        case(2007):
+          seven++;
+        break;
+        case(2008):
+          eight++;
+        break;
+        case(2009):
+          nine++;
+        break;
+        case(2010):
+          ten++;
+        break;
+        case(2011):
+          eleven++;
+        break;
+        case(2012):
+          tweleve++;
+        break;
+        case(2013):
+          thirteen++;
+        break;
+        case(2014):
+          fourteen++;
+        break;
+        case(2015):
+          fifteen++;
+        break;
+        case(2016):
+          sixteen++;
+        break;
+        case(2017):
+          seventeen++;
+        break;
+        case(2018):
+          eighteen++;
+        break;
+        
+      }
+    } 
+    yearList.add(seven); yearList.add(eight); yearList.add(nine); yearList.add(ten); yearList.add(eleven); yearList.add(tweleve); 
+    yearList.add(thirteen); yearList.add(fourteen); yearList.add(fifteen); yearList.add(sixteen); yearList.add(seventeen); yearList.add(eighteen);
+    return yearList;
+  }
+  //Leo
+  //method to get an ArrayList of matching reviews
+  ArrayList<Review> search()
+  {
+    reviews = new ArrayList<Review>(0);
+    if(bName.equals("") || bName.equals("eg. Randy's Flowers"))
+    {
+      
+    }else
+    {
+      validBusiness = true;
+    }
+    if(rName.equals("") || rName.equals("eg. Susanne Waters"))
+    {
+      
+    }else
+    {
+      validName = true;
+    }
+    if(realDate == null)
+    {
+      if(date.equals("") || date.equals("eg. dd/mm/yyyy"))
+      {
+        
+      }else
+      {
+        validDate = true;
+      }
+      if(validDate)
+      {
+        realDate = dateFormatter(date);
+      }else
+      {
+        //temproary, fix later
+        realDate = allReviewsList.get(0).date;
+      }
+    }else
+    {
+      validDate = true;
+    }
+    if(validBusiness && validName && validDate)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).businessName.equals(bName) && allReviewsList.get(i).userName.equals(rName) && allReviewsList.get(i).date.equals(realDate))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validBusiness && validName)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).businessName.equals(bName) && allReviewsList.get(i).userName.equals(rName))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validName && validDate)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).userName.equals(rName) && allReviewsList.get(i).date.equals(realDate))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validBusiness && validDate)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).businessName.equals(bName) && allReviewsList.get(i).date.equals(realDate))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validBusiness)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).businessName.equals(bName))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validName)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).userName.equals(rName))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }else if(validDate)
+    {
+      for(int i = 0; i < allReviewsList.size(); i++)
+      {
+        if(allReviewsList.get(i).date.equals(realDate))
+        {
+          reviews.add(allReviewsList.get(i));
+        }
+      }
+    }
+    return reviews;
+  }
+}

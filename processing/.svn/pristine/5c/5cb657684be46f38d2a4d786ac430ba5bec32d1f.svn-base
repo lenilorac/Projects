@@ -1,0 +1,38 @@
+//Ruth
+class Graph extends Screen
+{
+  ArrayList<Integer> queryList = new ArrayList<Integer>();
+  ArrayList<Bar> barList = new ArrayList<Bar>();
+  
+  Graph(ArrayList<Integer> queryList)
+  {
+     super(); 
+     this.queryList=queryList;
+     init_barList();
+  }
+  
+  void init_barList()
+  {
+    int gap=25;
+    for(int i=0; i<queryList.size(); i++)
+    {
+      int length = queryList.get(i);
+      Bar bar = new Bar(length, 600, 200, gap);
+      barList.add(bar);
+      gap += WIDTH_OF_BAR + 25;
+    }
+  }
+  
+  void draw()
+  {
+    background(white);
+    fill(black);
+    for(int i=0; i<barList.size(); i++)
+    {
+      barList.get(i).draw();
+      
+    }
+    line(200, 200, 200, 600);
+    line(200, 600, 600, 600);
+  }
+}
